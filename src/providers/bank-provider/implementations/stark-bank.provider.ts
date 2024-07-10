@@ -6,7 +6,7 @@ import { ISecretProvider } from "../../secret-provider/secret.provider.interface
 import { NotImplementedException } from "../../../errors/exceptions/not-implemented.exception";
 
 @injectable()
-class SparkBankProvider implements IBankProvider {
+class StarkBankProvider implements IBankProvider {
   constructor(
     @inject('SecretProvider')
     private secretProvider: ISecretProvider
@@ -17,11 +17,11 @@ class SparkBankProvider implements IBankProvider {
   async signIn() {
     if (
       !process.env.PRIVATE_KEY_SECRET_NAME ||
-      !process.env.SPARK_BANK_PROJECT_ID ||
-      !process.env.SPARK_BANK_ENVIROMENT
+      !process.env.STARK_BANK_PROJECT_ID ||
+      !process.env.STARK_BANK_ENVIROMENT
     ) {
       throw new NotImplementedException(
-        'Enviroments variables "PRIVATE_KEY_SECRET_NAME", "SPARK_BANK_PROJECT_ID" and "SPARK_BANK_ENVIROMENT" are required'
+        'Enviroments variables "PRIVATE_KEY_SECRET_NAME", "STARK_BANK_PROJECT_ID" and "STARK_BANK_ENVIROMENT" are required'
       );
     }
 
@@ -30,8 +30,8 @@ class SparkBankProvider implements IBankProvider {
     );
 
     const user = new starkbank.Project({
-      id: process.env.SPARK_BANK_PROJECT_ID,
-      environment: process.env.SPARK_BANK_ENVIROMENT,
+      id: process.env.STARK_BANK_PROJECT_ID,
+      environment: process.env.STARK_BANK_ENVIROMENT,
       privateKey: privateKeyContent,
     });
 
@@ -40,7 +40,7 @@ class SparkBankProvider implements IBankProvider {
 
   async createSingleInvoice(invoice: ICreateSingleInvoice): Promise<ICreateSingleInvoiceResponse> {
     if (!starkbank.user?.id) {
-      throw new NotImplementedException("Spark Bank not authenticated");
+      throw new NotImplementedException("Stark Bank not authenticated");
     }
 
     const [createdInvoice] = await starkbank.invoice.create([invoice as any]); // "any" pois não bate com a tipagem dos parâmetros obrigatórios das docs 
@@ -48,4 +48,4 @@ class SparkBankProvider implements IBankProvider {
     return createdInvoice;
   }
 }
-export { SparkBankProvider };
+export { StarkBankProvider };

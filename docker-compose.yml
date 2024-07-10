@@ -4,7 +4,7 @@ services:
   db:
     image: mysql
     restart: always
-    container_name: mysql_spark_bank
+    container_name: mysql_stark_bank
     environment:
       - MYSQL_DATABASE=$MYSQL_DATABASE_NAME
       - MYSQL_ROOT_PASSWORD=$MYSQL_DATABASE_ROOT_PASSWORD # deixei pra usar o root msm, ideal seria criar um user X especifico pro bd
