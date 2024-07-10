@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start:prod": "node dist/server.js",
+    "start": "node dist/server.js",
     "start:dev": "ts-node-dev --files -r tsconfig-paths/register --inspect --ignore-watch node_modules src/server.ts"
   },
   "devDependencies": {
