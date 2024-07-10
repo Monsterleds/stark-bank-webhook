@@ -6,7 +6,7 @@ const AppDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
     port: 3306,
-    username: "root",
+    username: process.env.MYSQL_DATABASE_USER,
     password: process.env.MYSQL_DATABASE_ROOT_PASSWORD,
     database: process.env.MYSQL_DATABASE_NAME,
     entities: [Invoice],
