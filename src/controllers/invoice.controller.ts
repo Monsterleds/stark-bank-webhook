@@ -7,6 +7,12 @@ import { InvoiceService } from "../services/invoice.service";
 export class InvoiceController {
   constructor(private invoiceService: InvoiceService) {}
 
+  async list(req: Request, res: Response) {
+    const invoices = await this.invoiceService.findAll();
+  
+    return res.send(invoices);
+  }
+
   async create(req: Request, res: Response) {
     const invoice = await this.invoiceService.create(req.body);
   

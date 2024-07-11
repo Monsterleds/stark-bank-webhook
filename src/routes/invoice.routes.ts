@@ -14,6 +14,10 @@ invoiceRouter.post("/",
   (req, res) => invoiceController.create(req, res)
 );
 
+invoiceRouter.get("/",
+  (req, res) => invoiceController.list(req, res)
+);
+
 // adicionar alguma segurança?
 invoiceRouter.post("/webhook",
   (req, res) => invoiceController.webhook(req, res)

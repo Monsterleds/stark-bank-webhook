@@ -42,6 +42,10 @@ export class InvoiceRepository {
     });
   }
 
+  async findAll(): Promise<Invoice[]> {
+    return this.invoiceRepository.find();
+  }
+
   async updateByStarkWebhookId({ starkWebhookId, ...invoice }: IUpdateByStarkWebhookId): Promise<void> {
     await this.invoiceRepository.update({ starkWebhookId }, invoice);
   }

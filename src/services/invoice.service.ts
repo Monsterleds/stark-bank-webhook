@@ -43,6 +43,10 @@ export class InvoiceService {
     return createdInvoice;
   }
 
+  async findAll() {
+    return this.invoiceRepository.findAll();
+  }
+
   async updateByStarkWebhookId(invoice: IUpdateByStarkWebhookId) {
     return this.invoiceRepository.updateByStarkWebhookId(invoice);
   }
