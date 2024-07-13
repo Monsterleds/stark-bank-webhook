@@ -1,10 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { cpf } from 'cpf-cnpj-validator';
 
-import { InvoiceRepository } from "../repositories/invoice.repository";
 import { IBankProvider } from "../providers/bank-provider/bank.provider.interface";
 import { InvoiceStatus } from "../models/invoice.model";
-import { IInvoiceRepository } from "../repositories/invoice.repository.interface";
+import { IInvoiceRepository } from "../repositories/abstracts/invoice.repository.interface";
 import { BadRequestException } from "../errors/exceptions/bad-request.exception";
 
 interface ICreateInvoiceDTO {

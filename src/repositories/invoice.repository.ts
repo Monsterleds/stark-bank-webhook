@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { Invoice } from "../models/invoice.model";
 import { AppDataSource } from "../configs/databases/mysql";
-import { ICreateInvoice, IInvoiceRepository, IUpdateByStarkWebhookId } from "./invoice.repository.interface";
+import { ICreateInvoice, IInvoiceRepository, IUpdateByStarkWebhookId } from "./abstracts/invoice.repository.interface";
 
 export class InvoiceRepository implements IInvoiceRepository {
   private invoiceRepository: Repository<Invoice>;

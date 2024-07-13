@@ -5,7 +5,7 @@ import { generate } from 'gerador-validador-cpf';
 
 import { InvoiceService } from './invoice.service';
 import { IBankProvider } from '../providers/bank-provider/bank.provider.interface';
-import { ICreateInvoice, IInvoiceRepository, IUpdateByStarkWebhookId } from '../repositories/invoice.repository.interface';
+import { ICreateInvoice, IInvoiceRepository, IUpdateByStarkWebhookId } from '../repositories/abstracts/invoice.repository.interface';
 import { Invoice } from '../models/invoice.model';
 import { generateRandomValues } from '../utils/math';
 import { names, uniqueNamesGenerator } from 'unique-names-generator';

@@ -1,5 +1,5 @@
-import { Invoice } from "../models/invoice.model";
-import { InvoiceStatus } from "../models/invoice.model";
+import { Invoice } from "../../models/invoice.model";
+import { InvoiceStatus } from "../../models/invoice.model";
 
 export interface ICreateInvoice {
   amount: number;
