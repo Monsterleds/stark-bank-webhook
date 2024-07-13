@@ -1,6 +1,10 @@
-import starkbank from "starkbank";
+import starkbank, { Invoice, Transfer } from "starkbank";
 
-import { IBankProvider, ICreateSingleInvoice, ICreateSingleInvoiceResponse } from "../bank.provider.interface";
+import {
+  IBankProvider,
+  ICreateSingleInvoice,
+  ICreateTransfer,
+} from "../bank.provider.interface";
 import { inject, injectable } from "tsyringe";
 import { ISecretProvider } from "../../secret-provider/secret.provider.interface";
 import { NotImplementedException } from "../../../errors/exceptions/not-implemented.exception";
@@ -8,7 +12,7 @@ import { NotImplementedException } from "../../../errors/exceptions/not-implemen
 @injectable()
 class StarkBankProvider implements IBankProvider {
   constructor(
-    @inject('SecretProvider')
+    @inject("SecretProvider")
     private secretProvider: ISecretProvider
   ) {
     this.signIn();
@@ -38,14 +42,26 @@ class StarkBankProvider implements IBankProvider {
     starkbank.user = user;
   }
 
-  async createSingleInvoice(invoice: ICreateSingleInvoice): Promise<ICreateSingleInvoiceResponse> {
+  async createSingleInvoice(invoice: ICreateSingleInvoice): Promise<Invoice> {
     if (!starkbank.user?.id) {
       throw new NotImplementedException("Stark Bank not authenticated");
     }
 
-    const [createdInvoice] = await starkbank.invoice.create([invoice as any]); // "any" pois não bate com a tipagem dos parâmetros obrigatórios das docs 
+    const [createdInvoice] = await starkbank.invoice.create([invoice as any]); // "any" pois a tipagem da lib não bate com os parâmetros opcionais das docs
 
     return createdInvoice;
+  }
+
+  async createTransfer(transfer: ICreateTransfer): Promise<Transfer> {
+    if (!starkbank.user?.id) {
+      throw new NotImplementedException("Stark Bank not authenticated");
+    }
+
+    const [createdTransfer] = await starkbank.transfer.create([
+      transfer as any, // "any" pois a tipagem da lib não bate com os parâmetros opcionais das docs
+    ]);
+
+    return createdTransfer;
   }
 }
 export { StarkBankProvider };

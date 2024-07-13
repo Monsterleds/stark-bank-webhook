@@ -32,14 +32,14 @@ export class InvoiceService {
       name: invoice.name,
       taxId: invoice.document,
     });
-
+    
     const createdInvoice = await this.invoiceRepository.create({
       name: invoice.name,
       taxId: invoice.document,
       amount: invoice.amount,
       starkWebhookId,
     });
-
+    
     return createdInvoice;
   }
 
