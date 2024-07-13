@@ -19,9 +19,7 @@ export interface ICreateTransfer {
   accountType: AccountTypes;
 }
 
-interface IBankProvider {
+export interface IBankProvider {
   createSingleInvoice(invoice: ICreateSingleInvoice): Promise<Invoice>;
   createTransfer(transfer: ICreateTransfer): Promise<Transfer>;
 }
-
-export { IBankProvider };

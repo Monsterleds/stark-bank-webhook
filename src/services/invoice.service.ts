@@ -1,8 +1,11 @@
 import { inject, injectable } from "tsyringe";
+import { cpf } from 'cpf-cnpj-validator';
 
 import { InvoiceRepository } from "../repositories/invoice.repository";
 import { IBankProvider } from "../providers/bank-provider/bank.provider.interface";
 import { InvoiceStatus } from "../models/invoice.model";
+import { IInvoiceRepository } from "../repositories/invoice.repository.interface";
+import { BadRequestException } from "../errors/exceptions/bad-request.exception";
 
 interface ICreateInvoiceDTO {
   amount: number;
@@ -23,10 +26,17 @@ export class InvoiceService {
   constructor(
     @inject("BankProvider")
     private bankProvider: IBankProvider,
-    private invoiceRepository: InvoiceRepository
+    @inject("InvoiceRepository")
+    private invoiceRepository: IInvoiceRepository
   ) {}
 
   async create(invoice: ICreateInvoiceDTO) {
+    const isValidDocument = cpf.isValid(invoice.document);
+    
+    if (!isValidDocument) {
+      throw new BadRequestException('Invalid document');
+    }
+
     const { id: starkWebhookId } = await this.bankProvider.createSingleInvoice({
       amount: invoice.amount,
       name: invoice.name,
@@ -43,11 +53,16 @@ export class InvoiceService {
     return createdInvoice;
   }
 
-  async findAll() {
-    return this.invoiceRepository.findAll();
-  }
-
   async updateByStarkWebhookId(invoice: IUpdateByStarkWebhookId) {
-    return this.invoiceRepository.updateByStarkWebhookId(invoice);
+    const newInvoice = await this.invoiceRepository.updateByStarkWebhookId(invoice);
+    
+    if (!newInvoice) {
+      // subir em uma DLQ pra não perder o dado.
+      // await sqs.publish('DLQ-XYZ', invoice);
+
+      throw new BadRequestException(`It was not possible to update the invoice with starkWebhookId ${invoice.starkWebhookId}`);
+    }
+
+    return newInvoice;
   }
 }

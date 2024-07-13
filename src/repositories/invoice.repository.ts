@@ -1,32 +1,9 @@
 import { Repository } from "typeorm";
-import { Invoice, InvoiceStatus } from "../models/invoice.model";
+import { Invoice } from "../models/invoice.model";
 import { AppDataSource } from "../configs/databases/mysql";
+import { ICreateInvoice, IInvoiceRepository, IUpdateByStarkWebhookId } from "./invoice.repository.interface";
 
-interface ICreateInvoice {
-  amount: number;
-  taxId: string;
-  name: string;
-  starkWebhookId: string;
-}
-
-interface IUpdateInvoice {
-  id: string;
-  amount?: number;
-  taxId?: string;
-  name?: string;
-  status?: InvoiceStatus;
-  starkWebhookId?: string;
-}
-
-interface IUpdateByStarkWebhookId {
-  starkWebhookId: string;
-  amount?: number;
-  taxId?: string;
-  name?: string;
-  status?: InvoiceStatus;
-}
-
-export class InvoiceRepository {
+export class InvoiceRepository implements IInvoiceRepository {
   private invoiceRepository: Repository<Invoice>;
 
   constructor() {
@@ -42,19 +19,8 @@ export class InvoiceRepository {
     });
   }
 
-  async findAll(): Promise<Invoice[]> {
-    return this.invoiceRepository.find();
-  }
-
-  async updateByStarkWebhookId({ starkWebhookId, ...invoice }: IUpdateByStarkWebhookId): Promise<void> {
+  async updateByStarkWebhookId({ starkWebhookId, ...invoice }: IUpdateByStarkWebhookId): Promise<Invoice | null> {
     await this.invoiceRepository.update({ starkWebhookId }, invoice);
-  }
-
-  async updateById(invoice: IUpdateInvoice): Promise<void> {
-    await this.invoiceRepository.update({ id: invoice.id }, invoice);
-  }
-
-  async findByStarkWebhookId(id: string): Promise<Invoice | null> {
-    return this.invoiceRepository.findOneBy({ starkWebhookId: id });
+    return this.invoiceRepository.findOneBy({ starkWebhookId });
   }
 }
