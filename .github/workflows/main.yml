@@ -40,6 +40,9 @@ jobs:
       - name: Installing NPM
         run: npm install
 
+      - name: Testing application
+        run: npm test
+
       - name: Building application
         run: npm run build
 
